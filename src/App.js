@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components'
+import Sidebar from './components/Sidebar';
+import ChatList from './components/ChatList';
+import ChatView from './components/ChatView';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <Sidebar />
+      <ChatList />
+      <Main>
+        <ChatView />
+      </Main>
+    </Wrapper>
   );
 }
 
 export default App;
+
+
+const Wrapper = styled.div `
+  background-color: #282a37;
+  min-height: 100vh;
+  max-height: 100vh;
+  min-width: 100vw;
+  max-width: 100vw;
+`
+
+const Main = styled.div1`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+`
