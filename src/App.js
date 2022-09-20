@@ -18,16 +18,20 @@ function App() {
 export default App;
 
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
   background-color: #282a37;
   min-height: 100vh;
   max-height: 100vh;
   min-width: 100vw;
   max-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
-const Main = styled.div1`
+const Main = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
 `
+
