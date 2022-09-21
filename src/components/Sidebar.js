@@ -1,20 +1,35 @@
 import styled from "styled-components"
+import { useState } from "react";
 // import cpLogo from '../assets/cp.png'
+import { getAuth, signOut } from 'firebase/auth'
 
-const Sidebar = () => {
+const Sidebar = ({ user, setUser }) => {
+    const [activeIcon, setActiveIcon] = useState("inbox");
+    const auth = getAuth()
+
+
+
     return (
         <Wrapper>
             <LogoContainer>
                 <img src='https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg' alt="snoopy logo" />
             </LogoContainer>
             <SidebarIcons>
-                <SidebarIcon><i className="fa-solid fa-inbox" /></SidebarIcon>
-                <SidebarIcon><i className="fas fa-cog" /></SidebarIcon>
-                <SidebarIcon><i className="fas fa-user-circle" /></SidebarIcon>
-                <SidebarIcon><i className="fas fa-bolt" /></SidebarIcon>
+                <SidebarIcon onClick={() => setActiveIcon('inbox')}>
+                    <i className="fa-solid fa-inbox" style={{color: activeIcon === 'inbox' && '#1d90f4'}} />
+                </SidebarIcon>
+                <SidebarIcon onClick={() => setActiveIcon('cog')}>
+                    <i className="fas fa-cog" style={{color: activeIcon === 'cog' && '#1d90f4'}} />
+                </SidebarIcon>
+                <SidebarIcon onClick={() => setActiveIcon('user')}>
+                    <i className="fas fa-user-circle" style={{color: activeIcon === 'user' && '#1d90f4'}} />
+                </SidebarIcon>
+                <SidebarIcon onClick={() => setActiveIcon('bolt')}>
+                    <i className="fas fa-bolt" style={{color: activeIcon === 'bolt' && '#1d90f4'}} />
+                </SidebarIcon>
             </SidebarIcons>
-            <ProfileIcon>
-            <img src='https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg' alt="snoopy logo" />
+            <ProfileIcon onClick={() => signOut(auth)}>
+            <img src={user.avatar} alt={user.name} />
 
             </ProfileIcon>
         </Wrapper>
