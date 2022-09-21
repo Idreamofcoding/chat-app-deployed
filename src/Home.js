@@ -2,14 +2,44 @@ import styled from 'styled-components'
 import Sidebar from './components/Sidebar';
 import ChatList from './components/ChatList';
 import ChatView from './components/ChatView';
+import { db } from './firebase';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
+import { useState, useEffect } from 'react';
 
 function Home({ user, setUser }) {
+  const [conversationData, setConversationData] = useState([])
+  const [currentConversation, setCurrentConversation] = useState('')
+
+  useEffect(() => {
+    const q = query(collection(db, 'messages'), orderBy('lastUpdated', 'desc'))
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const conversations = []
+
+      snapshot.docs.map(doc => {
+        conversations.push({
+          id: doc.id,
+          ...doc.data(),
+        })
+      })
+      setConversationData(conversations)
+    })
+
+    return () => unsubscribe()
+    
+
+  }, [])
+  
+
   return (
     <Wrapper>
       <Sidebar user={user} setUser={setUser} />
-      <ChatList />
+      <ChatList 
+        conversationData={conversationData} 
+        setCurrentConversation={setCurrentConversation}
+        />
       <Main>
-        <ChatView />
+        <ChatView currentConversation={currentConversation} />
       </Main>
     </Wrapper>
   );

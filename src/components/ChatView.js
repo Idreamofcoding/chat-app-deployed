@@ -1,17 +1,46 @@
-import React from 'react'
 import styled from 'styled-components'
+import { useState, useEffect } from 'react'
+import { collection, onSnapshot, addDoc, orderBy, query, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
+import {db} from '../firebase';
 
-const ChatView = () => {
+
+
+
+const ChatView = ({ currentConversation }) => {
+  const [newTitle, setNewTitle] = useState(currentConversation.name)
+
+  useEffect(() => {
+    setNewTitle(currentConversation.name)
+  }, [currentConversation])
+
+  const updateChatTitle = async e => {
+    e.preventDefault()
+    const chatRef = doc(db, "messages", currentConversation.id)
+
+    if (newTitle) {
+      await updateDoc(chatRef, {
+          name: newTitle,
+      })
+    }
+  }
+
+  // const handleChange = event => {
+  //   setNewTitle(event.target.value);
+  //   console.log("new", handleChange)
+  // };
+
   return (
     <Wrapper>
       <ChatDetails>
         <Avatar>
-        <img src='https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg' alt="snoopy logo" />
+          {
+            currentConversation && <img src={currentConversation.avatar} alt={currentConversation.name} />
+          }
         </Avatar>
         <ChatInfo>
-          {/* <Name>PWR CHAT</Name> */}
-          <Name value={"pwr chat"} />
-          {/* MUST CHANGE NAME  <Name value={'pwr chat'} />*/}
+          <form onSubmit={updateChatTitle}>
+            <Name value={currentConversation ? newTitle : 'Select a chat'} onChange={e => setNewTitle(e.target.value)} disabled={!currentConversation} />
+          </form>
           <OnlineIndicator><span>·</span> Online</OnlineIndicator>
         </ChatInfo>
         <Icons>

@@ -3,27 +3,30 @@ import styled from 'styled-components'
 // import cpLogo from '../assets/cp.png'
 
 
-const conversationData = [
-  {
-    name: 'pwr chat',
-    avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
-    lastMessage: 'Hello, how are you?',
-  },
-  {
-    name: 'pwr chat',
-    avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
-    lastMessage: 'Hello, how are you?',
-  }
-]
+// const conversationData = [
+//   {
+//     name: 'pwr chat',
+//     avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
+//     lastMessage: 'Hello, how are you?',
+//   },
+//   {
+//     name: 'pwr chat',
+//     avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
+//     lastMessage: 'Hello, how are you?',
+//   }
+// ]
 
-const ChatList = () => {
+const ChatList = ({ conversationData, currentConversation, setCurrentConversation }) => {
   return (
     <Wrapper>
       <Title>Chats</Title>
       <Subtitle>Latest Conversations</Subtitle>
       <Conversations>
         {conversationData.map((conversation, index) => (
-          <ConversationCard key={index}>
+          <ConversationCard key={index}
+            style={{ backgroundColor: currentConversation === conversation.id ? '#1d90f4' : '#282a37'}}
+            onClick={() => setCurrentConversation(conversation)}
+          >
             <Avatar>
               <img src={conversation.avatar} alt={conversation.name} />
             </Avatar>
