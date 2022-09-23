@@ -95,8 +95,6 @@ const Wrapper = styled.div`
   min-width: 100vw;
   max-width: 100vw;
   display: flex;
-  ${'' /* align-items: center;
-  justify-content: center; */}
 `
 
 const SignInContainer = styled.div`
@@ -156,9 +154,7 @@ const Row = styled.div`
   & > img {
     width: 25%;
     height: 33.99vh;
-    ${'' /* object-fit: cover; */}
     z-index: 60;
-    ${'' /* overflow-y: hidden; */}
     margin: 0;
     padding: 0;
     overflow-y: hidden;
@@ -180,9 +176,7 @@ const Rowone = styled.div`
   & > img {
     width: 25%;
     height: 33.99vh;
-    ${'' /* object-fit: cover; */}
     z-index: 60;
-    ${'' /* overflow-y: hidden; */}
     margin: 0;
     padding: 0;
     overflow-y: hidden;
@@ -201,9 +195,7 @@ const Rowtwo = styled.div`
   & > img {
     width: 25%;
     height: 41vh;
-    ${'' /* object-fit: cover; */}
     z-index: 60;
-    ${'' /* overflow-y: hidden; */}
     margin: 0;
     padding: 0;
     overflow-y: hidden;

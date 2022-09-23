@@ -1,22 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-// import cpLogo from '../assets/cp.png'
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
 
-
-// const conversationData = [
-//   {
-//     name: 'pwr chat',
-//     avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
-//     lastMessage: 'Hello, how are you?',
-//   },
-//   {
-//     name: 'pwr chat',
-//     avatar: 'https://static01.nyt.com/images/2021/02/09/arts/05snoopy1/05snoopy1-mediumSquareAt3X.jpg',
-//     lastMessage: 'Hello, how are you?',
-//   }
-// ]
 
 const ChatList = ({ conversationData, currentConversation, setCurrentConversation }) => {
+
+  const AddNewChat = async () => {
+    await addDoc(collection(db, "messages"), {
+      name: "New Chat",
+      avatar: `https://avatars.dicebear.com/api/micah/${Math.random()}.svg?mood[]=happy`,
+      lastMessage: "",
+      lastUpdated: serverTimestamp(),
+    });
+  };
+
+
   return (
     <Wrapper>
       <Title>Chats</Title>
@@ -36,6 +35,15 @@ const ChatList = ({ conversationData, currentConversation, setCurrentConversatio
             </ConversationInfo>
           </ConversationCard>
         ))}
+
+        <AddNewConversation onClick={AddNewChat}>
+          <Avatar>
+            <i className='fas fa-plus' />
+          </Avatar>
+          <ConversationInfo>
+            <Name>Add New Convo</Name>
+          </ConversationInfo>
+        </AddNewConversation>
       </Conversations>
     </Wrapper>
   )
@@ -48,6 +56,7 @@ const Wrapper = styled.div`
   width: 300px;
   height: calc(100vh - 100px);
   padding: 50px 32px;
+
 `;
 
 const Title = styled.div`
@@ -64,7 +73,9 @@ const Subtitle = styled.div`
 `;
 
 const Conversations = styled.div`
-
+  max-height: 73vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const ConversationCard = styled.div`
@@ -102,4 +113,27 @@ const Name = styled.div`
 
 const LastMessage = styled.div`
   font-weight: 500;
+`;
+
+const AddNewConversation = styled.div`
+  display: flex;
+  margin: 12px -12px;
+  padding: 12px;
+  border-radius: 12px;
+
+  & div,
+  i {
+    color: #757688;
+  }
+
+  &:hover {
+    background-color: #184773 !important;
+    cursor: pointer;
+
+    & div,
+    i {
+      color: #eee;
+    }
+  }
+  max-height: 100vh;
 `;

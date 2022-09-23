@@ -217,7 +217,6 @@ const MessagesWrapper = styled.div`
     display: flex;
     flex-direction: column;
     overflow: scroll;
-    ${'' /* maybe this is where i thought of putting overflow hidden Y */}
     
 `
 
