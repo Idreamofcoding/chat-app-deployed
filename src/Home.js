@@ -39,7 +39,7 @@ function Home({ user, setUser }) {
         setCurrentConversation={setCurrentConversation}
         />
       <Main>
-        <ChatView currentConversation={currentConversation} />
+        <ChatView currentConversation={currentConversation} user={user} />
       </Main>
     </Wrapper>
   );

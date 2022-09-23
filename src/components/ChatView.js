@@ -1,13 +1,17 @@
 import styled from 'styled-components'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { collection, onSnapshot, addDoc, orderBy, query, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import {db} from '../firebase';
+import IncomingMessage from './IncomingMessage';
+import SentMessage from './SentMessage';
 
 
 
 
-const ChatView = ({ currentConversation }) => {
+const ChatView = ({ currentConversation, user }) => {
   const [newTitle, setNewTitle] = useState(currentConversation.name)
+  const [messages, setMessages] = useState([])
+  const [newMessage, setNewMessage] = useState('')
 
   useEffect(() => {
     setNewTitle(currentConversation.name)
@@ -24,10 +28,59 @@ const ChatView = ({ currentConversation }) => {
     }
   }
 
-  // const handleChange = event => {
-  //   setNewTitle(event.target.value);
-  //   console.log("new", handleChange)
-  // };
+  useEffect(() => {
+    if(currentConversation) {
+      const q = query(
+        collection(db, 'messages', currentConversation.id, 'messageHistory'),
+        orderBy('timestamp', 'desc'),
+      )
+
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const tempMessages = []
+
+        snapshot.forEach(doc => {
+          tempMessages.push({
+            id: doc.id,
+            ...doc.data(),
+
+          })
+        })
+        setMessages(tempMessages)
+
+      })
+
+      return () => unsubscribe()
+    }
+  }, [currentConversation])
+
+  const sendMessage = async e => {
+    e.preventDefault();
+
+    if(newMessage) {
+      await addDoc(
+        collection(db, 'messages', currentConversation.id, 'messageHistory'),
+        {
+          name: user.name,
+          email: user.email,
+          message: newMessage,
+          avatar: user.avatar,
+          timestamp: serverTimestamp(),
+          
+        },
+      )
+        
+      setNewMessage('')
+
+      await updateDoc(
+        doc(db, 'messages', currentConversation.id), {
+          lastUpdated: serverTimestamp(),
+          lastMessage: newMessage,
+        }
+      )
+        
+    }
+  }
+
 
   return (
     <Wrapper>
@@ -53,18 +106,31 @@ const ChatView = ({ currentConversation }) => {
       </ChatDetails>
       <MessagesWrapper>
         <Messages>
-          <form>
+          {
+            messages.map((message, index) => (
+              <>
+                {
+                  message.email === user.email ? (
+                    <SentMessage key={index} message={message} />
+                  ) : (
+                    <IncomingMessage key={index} message={message} />
+                  )
+                }
+              </>
+            ))
+          }
+        </Messages>
+        <form onSubmit={sendMessage}>
             <InputWrapper>
               <ActionButton>
                 <i className='fas fa-plus' />
               </ActionButton>
-              <MessageInput placeholder="Type a message" />
-              <ActionButton>
+              <MessageInput placeholder="Type a message" value={newMessage} onChange={e => setNewMessage(e.target.value)} />
+              <ActionButton onClick={sendMessage}>
                 <i className='fas fa-arrow-circle-up' />
               </ActionButton>
             </InputWrapper>
           </form>
-        </Messages>
       </MessagesWrapper>
     </Wrapper>
   )
