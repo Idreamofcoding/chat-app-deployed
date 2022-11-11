@@ -7,7 +7,10 @@ const Sidebar = ({ user, setUser }) => {
     const [activeIcon, setActiveIcon] = useState("inbox");
     const auth = getAuth()
 
-
+    const [formData, setFormData] = useState({
+        name: auth.currentUser.displayName,
+        email: auth.currentUser.email
+    })
 
     return (
         <Wrapper>
@@ -28,10 +31,15 @@ const Sidebar = ({ user, setUser }) => {
                     <i className="fas fa-bolt" style={{color: activeIcon === 'bolt' && '#1d90f4'}} />
                 </SidebarIcon>
             </SidebarIcons>
+            {/*  */}
+            {/*  */}
+            {/*  */}
             <ProfileIcon onClick={() => signOut(auth)}>
             <img src={user.avatar} alt={user.name} />
-
             </ProfileIcon>
+            <button type="button" className="logOut" onClick={() => signOut(auth)}>
+                Logout
+            </button>
         </Wrapper>
     )
 }

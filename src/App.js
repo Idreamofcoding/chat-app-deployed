@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import Home from './Home'
-import { getAuth, signInWithPopup, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, Link, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth'
 import { provider } from './firebase'
 import baldEagle from './assets/bald-eagle-dep-pexels.jpeg'
 import bar from './assets/bar-dep-pexels.jpeg'
@@ -17,9 +17,45 @@ import thanks from './assets/thanksgiving-dep-pexels.jpeg'
 import jatat from './assets/jap-tatted-dep-pexels.jpeg'
 
 
+
 const App = () => {
   const [user, setUser] = useState(null);
   const auth = getAuth();
+  
+  const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+
+  const { email, password } = formData
+
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value
+    }))
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const auth = getAuth()
+
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+
+      
+      setUser({
+        name: userCredential.user.displayName,
+        email: userCredential.user.email,
+      })
+      console.log("dummy login success")
+    } catch(error) {
+        console.log("whatsapp",error)
+    }
+
+  }
 
   useEffect(() => {
     onAuthStateChanged(auth, userSession => {
@@ -71,6 +107,22 @@ const App = () => {
             <SignInButton onClick={handleUserLogin}>
               Log In With Google
             </SignInButton>
+            {/* or Use Dummy */}
+            {/* input email */}
+            {/* input password */}
+            <Form onSubmit={onSubmit}>
+              <p>Alternative Login</p>
+              <label>dummychatR@gmail.com</label>
+              <br/>
+              <input type="email" className="emailInput" placeholder="Enter Email" id="email" value={email} onChange={onChange} />
+              <br />
+              <label>PW: 123456</label>
+              <br/>
+              <div className="passwordInputDiv">
+                <input type={showPassword ? 'text' : 'password'} className="passwordInput" placeholder="Password" id="password" value={password} onChange={onChange}/>
+              </div>
+              <input type="submit" value="Log In" id="submit" />
+            </Form>
           </SignInContainer>
           <Rowtwo>
               <img src={merce} alt="" />
@@ -87,6 +139,7 @@ const App = () => {
 }
 
 export default App
+
 
 const Wrapper = styled.div`
   background-color: #282a37;
@@ -107,7 +160,7 @@ const SignInContainer = styled.div`
   transform: translate(-50%, -50%);
   z-index: 70;
   border: 2px solid white;
-  padding-top: 19em;
+  padding-top: 15em;
   padding-bottom: 19em;
   padding-right: 10em;
   padding-left: 10em;
@@ -199,5 +252,35 @@ const Rowtwo = styled.div`
     margin: 0;
     padding: 0;
     overflow-y: hidden;
+  }
+`
+
+
+const Form = styled.form`
+  text-align: center;
+  transform: translateY(40px);
+  &  > label {
+    color: white;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  & > #email, #password {
+    width: 200px;
+    height: 28px;
+    border: 2px solid grey;
+    padding: 2px 0px 2px 5px;
+    color: black;
+    font-weight: 800;
+    font-size: 1.12em;
+    margin-bottom: 10px;
+  };
+  &  > #submit {
+    width: 110px;
+    height: 38px;
+    background-color: #1c91f4;
+    transform: translateY(10px);
+    border-radius: 5px;
+    font-size: 1.12em;
+    font-weight: bolder;
   }
 `
