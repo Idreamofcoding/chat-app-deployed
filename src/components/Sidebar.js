@@ -1,6 +1,5 @@
 import styled from "styled-components"
 import { useState } from "react";
-// import cpLogo from '../assets/cp.png'
 import { getAuth, signOut } from 'firebase/auth'
 
 const Sidebar = ({ user, setUser }) => {
@@ -37,9 +36,9 @@ const Sidebar = ({ user, setUser }) => {
             <ProfileIcon onClick={() => signOut(auth)}>
             <img src={user.avatar} alt={user.name} />
             </ProfileIcon>
-            <button type="button" className="logOut" onClick={() => signOut(auth)}>
+            <Button type="button" className="logOut" onClick={() => signOut(auth)}>
                 Logout
-            </button>
+            </Button>
         </Wrapper>
     )
 }
@@ -109,4 +108,17 @@ const ProfileIcon = styled.div`
         cursor: pointer;
         transform: scale(1.09)
     }
+`
+
+const Button = styled.div`
+    width: 80px;
+    height: 40px;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid lime;
+    border-radius: 5px;
+    font-size: 1.12em;
+    font-weight: bolder;
 `
